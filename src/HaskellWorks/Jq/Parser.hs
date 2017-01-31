@@ -34,5 +34,8 @@ jqSelector = symbol "." *>
   <|> (symbol "[" *> jqSelectorInSubscript <*  symbol "]")
   )
 
-jqQuery :: Parser u JqSelector
-jqQuery = jqSelector <* eof
+jqSelectors :: Parser u [JqSelector]
+jqSelectors = many jqSelector
+
+jqQuery :: Parser u [JqSelector]
+jqQuery = jqSelectors <* eof
