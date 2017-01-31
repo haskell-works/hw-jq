@@ -125,6 +125,9 @@ data Path = PathOfAbsolute [PathToken] | PathOfRelative [PathToken]
 
 data JqFieldName = JqFieldName String deriving (Eq, Show)
 
-data JqStep = JqStepOfFieldName JqFieldName deriving (Eq, Show)
+data JqSelector
+  = JqSelectorOfFieldLiteral JqFieldName
+  | JqSelectorOfFieldString JqFieldName
+  deriving (Eq, Show)
 
-data JqPath = JqPathCons JqStep | JqPathEmpty deriving (Eq, Show)
+data JqPath = JqPathCons JqSelector | JqPathEmpty deriving (Eq, Show)

@@ -22,3 +22,13 @@ jqFieldLiteralTail = many (digit <|> letter <|> underscore)
 
 jqFieldLiteral :: Parser u JqFieldName
 jqFieldLiteral = JqFieldName <$> ((:) <$> jqFieldLiteralLead <*> jqFieldLiteralTail)
+
+jqSelectorInSubscript :: Parser u JqSelector
+jqSelectorInSubscript
+  = JqSelectorOfFieldString <$> (JqFieldName <$> stringLiteral)
+
+jqSelector :: Parser u JqSelector
+jqSelector = symbol "." *>
+  (   JqSelectorOfFieldLiteral <$> jqFieldLiteral
+  <|> (symbol "[" *> jqSelectorInSubscript <*  symbol "]")
+  )
