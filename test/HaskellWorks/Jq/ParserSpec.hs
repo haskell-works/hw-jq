@@ -22,5 +22,5 @@ import           Test.Hspec
 spec :: Spec
 spec = describe "HaskellWorks.Jq.ParserSpec" $ do
   it "$.store: The authors of all books" $ do
-    parse jqFieldName "" "fieldName" `shouldBe`
-      Right (JqFieldName "fieldName")
+    parse jqFieldLiteral "" "fieldLiteral" `shouldBe`
+      Right (JqFieldName "fieldLiteral")

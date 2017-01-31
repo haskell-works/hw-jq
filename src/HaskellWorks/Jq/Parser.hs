@@ -14,11 +14,11 @@ import HaskellWorks.Jq.Ast
 import HaskellWorks.Jq.Lexer
 import Text.Parsec.Char
 
-jqFieldNameLead :: Parser u Char
-jqFieldNameLead = digit <|> letter <|> underscore
+jqFieldLiteralLead :: Parser u Char
+jqFieldLiteralLead = digit <|> letter <|> underscore
 
-jqFieldNameTail :: Parser u String
-jqFieldNameTail = many (digit <|> letter <|> underscore)
+jqFieldLiteralTail :: Parser u String
+jqFieldLiteralTail = many (digit <|> letter <|> underscore)
 
-jqFieldName :: Parser u JqFieldName
-jqFieldName = JqFieldName <$> ((:) <$> jqFieldNameLead <*> jqFieldNameTail)
+jqFieldLiteral :: Parser u JqFieldName
+jqFieldLiteral = JqFieldName <$> ((:) <$> jqFieldLiteralLead <*> jqFieldLiteralTail)
