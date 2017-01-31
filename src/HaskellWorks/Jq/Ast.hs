@@ -120,3 +120,9 @@ data Relative
 data Absolute = Absolute Relative deriving (Eq, Show)
 
 data Path = PathOfAbsolute [PathToken] | PathOfRelative [PathToken]
+
+data JqFieldName = JqFieldName String
+
+data JqStep = JqStepOfFieldName JqFieldName
+
+data JqPath = JqPathCons JqStep | JqPathEmpty
