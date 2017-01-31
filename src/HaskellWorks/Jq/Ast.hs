@@ -121,8 +121,10 @@ data Absolute = Absolute Relative deriving (Eq, Show)
 
 data Path = PathOfAbsolute [PathToken] | PathOfRelative [PathToken]
 
-data JqFieldName = JqFieldName String
+----
 
-data JqStep = JqStepOfFieldName JqFieldName
+data JqFieldName = JqFieldName String deriving (Eq, Show)
 
-data JqPath = JqPathCons JqStep | JqPathEmpty
+data JqStep = JqStepOfFieldName JqFieldName deriving (Eq, Show)
+
+data JqPath = JqPathCons JqStep | JqPathEmpty deriving (Eq, Show)

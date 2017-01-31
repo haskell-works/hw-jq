@@ -12,13 +12,15 @@
 
 module HaskellWorks.Jq.ParserSpec (spec) where
 
--- import           HaskellWorks.Jq.Ast
--- import           HaskellWorks.Jq.Parser
+import           HaskellWorks.Jq.Ast
+import           HaskellWorks.Jq.Parser
+import           Text.Parsec
 import           Test.Hspec
 
 {-# ANN module ("HLint: ignore Redundant do" :: String) #-}
 
 spec :: Spec
 spec = describe "HaskellWorks.Jq.ParserSpec" $ do
-  it "$.store.book[*].author: The authors of all books" $ do
-    True `shouldBe` True
+  it "$.store: The authors of all books" $ do
+    parse jqFieldName "" "fieldName" `shouldBe`
+      Right (JqFieldName "fieldName")
