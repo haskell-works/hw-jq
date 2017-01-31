@@ -28,7 +28,6 @@ parseOk :: (Eq a, Show a) => Parser () a -> String -> String -> a -> SpecWith (A
 parseOk parser name text expected = it ("parse " ++ name ++ " \"" ++ escapeDoubleQuote text ++ "\"") $ do
   parse parser "" text `shouldBe` Right expected
 
-
 spec :: Spec
 spec = describe "HaskellWorks.Jq.ParserSpec" $ do
   parseOk jqFieldLiteral "jqFieldLiteral" "fieldLiteral" $

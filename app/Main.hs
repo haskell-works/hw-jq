@@ -13,7 +13,7 @@ defaultOpts = Opts {}
 
 runOpts :: Opts -> [String] -> IO ()
 runOpts opts (x:xs) = do
-  let expr = parse jqSelector "" x
+  let expr = parse jqQuery "" x
   print expr
   runOpts opts xs
 runOpts _ [] = return ()
