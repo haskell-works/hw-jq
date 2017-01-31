@@ -15,7 +15,7 @@ import HaskellWorks.Jq.Lexer
 import Text.Parsec.Char
 
 jqFieldLiteralLead :: Parser u Char
-jqFieldLiteralLead = digit <|> letter <|> underscore
+jqFieldLiteralLead = letter <|> underscore
 
 jqFieldLiteralTail :: Parser u String
 jqFieldLiteralTail = many (digit <|> letter <|> underscore)
