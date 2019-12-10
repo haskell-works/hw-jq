@@ -1,30 +1,53 @@
+cabal-version: 2.4
+
 name:                   hw-jq
 version:                0.0.0.1
 synopsis:               Memory efficient JSON parser
-description:            Please see README.md
+description:            Memory efficient JSON parser. Please see README.md
 homepage:               http://github.com/haskell-works/hw-jq#readme
-license:                BSD3
+license:                BSD-3-Clause
 license-file:           LICENSE
 author:                 John Ky
 maintainer:             newhoggy@gmail.com
-copyright:              2017 John Ky
+copyright:              2017-2019 John Ky
 category:               Data, Conduit
 build-type:             Simple
-extra-source-files:     README.md,
-                        corpus/5000B.bp,
-                        corpus/5000B.ib,
-                        corpus/5000B.json,
-                        corpus/issue-0001.bp,
-                        corpus/issue-0001.ib,
-                        corpus/issue-0001.json,
-                        corpus/issue-0001.md
-cabal-version:          >= 1.22
+extra-source-files:     README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/haskell-works/hw-jq
+
+common base                     { build-depends: base                     >= 4          && < 5      }
+
+common ansi-wl-pprint           { build-depends: ansi-wl-pprint                                     }
+common array                    { build-depends: array                                              }
+common attoparsec               { build-depends: attoparsec                                         }
+common bytestring               { build-depends: bytestring                                         }
+common conduit                  { build-depends: conduit                                            }
+common containers               { build-depends: containers                                         }
+common dlist                    { build-depends: dlist                                              }
+common doctest                  { build-depends: doctest                                            }
+common doctest-discover         { build-depends: doctest-discover         >= 0.2        && < 0.3    }
+common extra                    { build-depends: extra                                              }
+common hspec                    { build-depends: hspec                                              }
+common hw-jq                    { build-depends: hw-jq                                              }
+common mmap                     { build-depends: mmap                                               }
+common mono-traversable         { build-depends: mono-traversable                                   }
+common mtl                      { build-depends: mtl                                                }
+common parsec                   { build-depends: parsec                                             }
+common resourcet                { build-depends: resourcet                                          }
+common scientific               { build-depends: scientific                                         }
+common text                     { build-depends: text                                               }
+common vector                   { build-depends: vector                                             }
+common word8                    { build-depends: word8                                              }
+
+common config
+  default-language:     Haskell2010
+  ghc-options:          -Wall
 
 executable hw-jq
-  hs-source-dirs:       app
-  main-is:              Main.hs
-  ghc-options:          -threaded -rtsopts -with-rtsopts=-N -O2 -Wall -msse4.2
-  build-depends:        base                          >= 4          && < 5
+  import:               base, config
                       , array
                       , ansi-wl-pprint
                       , attoparsec
@@ -43,16 +66,12 @@ executable hw-jq
                       , text
                       , vector
                       , word8
-  default-language:     Haskell2010
+  hs-source-dirs:       app
+  main-is:              Main.hs
+  ghc-options:          -threaded -rtsopts -with-rtsopts=-N -O2 -msse4.2
 
 library
-  hs-source-dirs:       src
-  exposed-modules:      HaskellWorks.Jq.Ast
-                      , HaskellWorks.Jq.Lexer
-                      , HaskellWorks.Jq.Parser
-                      , HaskellWorks.Jq.Types
-
-  build-depends:        base                          >= 4          && < 5
+  import:               base, config
                       , array
                       , ansi-wl-pprint
                       , attoparsec
@@ -70,17 +89,15 @@ library
                       , text
                       , vector
                       , word8
-
-  default-language:     Haskell2010
-  ghc-options:          -Wall -O2 -msse4.2
+  hs-source-dirs:       src
+  exposed-modules:      HaskellWorks.Jq.Ast
+                      , HaskellWorks.Jq.Lexer
+                      , HaskellWorks.Jq.Parser
+                      , HaskellWorks.Jq.Types
+  ghc-options:          -O2 -msse4.2
 
 test-suite hw-jq-test
-  type:                 exitcode-stdio-1.0
-  hs-source-dirs:       test
-  main-is:              Spec.hs
-  other-modules:        HaskellWorks.Jq.LexerSpec
-                      , HaskellWorks.Jq.ParserSpec
-  build-depends:        base                          >= 4          && < 5
+  import:               base, config
                       , array
                       , ansi-wl-pprint
                       , attoparsec
@@ -99,9 +116,20 @@ test-suite hw-jq-test
                       , text
                       , vector
                       , word8
-  ghc-options:          -threaded -rtsopts -with-rtsopts=-N -Wall
-  default-language:     Haskell2010
+  type:                 exitcode-stdio-1.0
+  hs-source-dirs:       test
+  main-is:              Spec.hs
+  other-modules:        HaskellWorks.Jq.LexerSpec
+                      , HaskellWorks.Jq.ParserSpec
+  ghc-options:          -threaded -rtsopts -with-rtsopts=-N
 
-source-repository head
-  type:     git
-  location: https://github.com/haskell-works/hw-jq
+test-suite doctest
+  import:               base, config
+                      , doctest
+                      , doctest-discover
+                      , hw-jq
+  type:                 exitcode-stdio-1.0
+  ghc-options:          -threaded
+  main-is:              DoctestDriver.hs
+  HS-Source-Dirs:       doctest
+  build-tool-depends:   doctest-discover:doctest-discover
