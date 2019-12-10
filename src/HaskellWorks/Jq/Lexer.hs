@@ -1,7 +1,7 @@
-{-# LANGUAGE BangPatterns                 #-}
-{-# LANGUAGE FlexibleContexts             #-}
-{-# LANGUAGE OverloadedStrings            #-}
-{-# LANGUAGE PolymorphicComponents        #-}
+{-# LANGUAGE BangPatterns          #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE PolymorphicComponents #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing  #-}
 {-# OPTIONS_GHC -Wno-unused-do-bind       #-}
 {-# OPTIONS_GHC -Wno-type-defaults        #-}
@@ -9,16 +9,17 @@
 module HaskellWorks.Jq.Lexer where
 
 import Control.Monad.Identity
-import Data.Char (isAlpha, toLower, toUpper, isSpace, digitToInt, ord, isDigit)
-import Data.List (foldl', nub, sort)
-import Data.List.Extra (replace)
+import Data.Char              (digitToInt, isAlpha, isDigit, isSpace, ord, toLower, toUpper)
+import Data.List              (foldl', nub, sort)
+import Data.List.Extra        (replace)
 import Data.Maybe
-import qualified Data.Scientific as Sci
-import Data.Scientific (Scientific)
+import Data.Scientific        (Scientific)
 import HaskellWorks.Jq.Ast
 import Text.Parsec.Char
 import Text.Parsec.Combinator
 import Text.Parsec.Prim
+
+import qualified Data.Scientific as Sci
 
 type Parser u = ParsecT String u Identity
 
@@ -347,9 +348,9 @@ isReserved :: Ord t => [t] -> t -> Bool
 isReserved names name = scan names
   where scan []     = False
         scan (r:rs) = case compare r name of
-          LT  -> scan rs
-          EQ  -> True
-          GT  -> False
+          LT -> scan rs
+          EQ -> True
+          GT -> False
 
 theReservedNames :: [String]
 theReservedNames
@@ -532,8 +533,8 @@ subQuery = SubQuery <$> ((:) <$> (try current <|> root) <*> pathSequence)
 expression2 :: Parser u FilterToken
 expression2 = tokenOf <$> subQuery <*> optionMaybe ((,) <$> comparisonOperator <*> (try (FilterValueOfSubQuery <$> subQuery) <|> value))
   where tokenOf :: SubQuery -> Maybe (ComparisonOperator, FilterValue) -> FilterToken
-        tokenOf subq1 Nothing           = HasFilter subq1
-        tokenOf lhs   (Just (op, rhs))  = ComparisonFilter op (FilterValueOfSubQuery lhs) rhs
+        tokenOf subq1 Nothing          = HasFilter subq1
+        tokenOf lhs   (Just (op, rhs)) = ComparisonFilter op (FilterValueOfSubQuery lhs) rhs
 
 pRegexMode :: Parser u RegexMode
 pRegexMode = RegexMode <$> (isJust <$> optionMaybe (char 'i'))
@@ -571,8 +572,8 @@ subscriptFilter = symbol "[?(" *> booleanExpression <* symbol ")]"
 
 subscriptField :: Parser u FieldAccessor
 subscriptField = subscribe <$> (symbol "[" *> sepBy quotedField (symbol ",") <* symbol "]")
-  where subscribe [f1]    = Field f1
-        subscribe fields  = MultiField fields
+  where subscribe [f1]   = Field f1
+        subscribe fields = MultiField fields
 
 dotField :: Parser u FieldAccessor
 dotField = Field <$> (symbol "." *> field)
