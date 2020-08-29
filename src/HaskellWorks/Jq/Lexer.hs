@@ -10,6 +10,7 @@ module HaskellWorks.Jq.Lexer where
 
 import Control.Monad.Identity
 import Data.Char              (digitToInt, isAlpha, isDigit, isSpace, ord, toLower, toUpper)
+import Data.Functor
 import Data.List              (foldl', nub, sort)
 import Data.List.Extra        (replace)
 import Data.Maybe
@@ -20,6 +21,8 @@ import Text.Parsec.Combinator
 import Text.Parsec.Prim
 
 import qualified Data.Scientific as Sci
+
+{- HLINT ignore "Use <$>" -}
 
 type Parser u = ParsecT String u Identity
 
@@ -255,8 +258,7 @@ exponent' = do
 int :: Parser u Integer
 int = do
   f <- lexeme sign
-  n <- nat
-  return (f n)
+  f <$> nat
 
 sign :: Parser u (Integer -> Integer)
 sign  =   (char '-' >> return negate)
@@ -478,7 +480,7 @@ arrayPartial :: Parser u ArrayAccessor
 arrayPartial = try arraySlicePartial <|> arrayRandomAccessPartial
 
 arrayAll :: Parser u ArraySlice
-arrayAll = symbol "*" *> return (ArraySlice Nothing Nothing 1)
+arrayAll = symbol "*" $> ArraySlice Nothing Nothing 1
 
 arrayAccessors :: Parser u ArrayAccessor
 arrayAccessors = symbol "[" *> arraySpec <* symbol "]"
@@ -496,11 +498,11 @@ numberValue = numberOf <$> scientific
 
 booleanValue :: Parser u FilterDirectValue
 booleanValue
-  =   try (symbol "true"  *> return JPTrue)
-  <|>     symbol "false" *> return JPFalse
+  =   try (symbol "true" $> JPTrue)
+  <|>     symbol "false" $> JPFalse
 
 nullValue :: Parser u FilterValue
-nullValue = symbol "null" *> return (FilterValueOfFilterDirectValue JPNull)
+nullValue = symbol "null" $> FilterValueOfFilterDirectValue JPNull
 
 stringValue :: Parser u JPString
 stringValue = JPString <$> quotedValue
@@ -514,18 +516,18 @@ value
 
 comparisonOperator :: Parser u ComparisonOperator
 comparisonOperator
-  =   try (symbol "=="  *> return EqOperator)
-  <|> try (symbol "!="  *> return NotEqOperator)
-  <|> try (symbol "<="  *> return LessOrEqOperator)
-  <|> try (symbol "<"   *> return LessOperator)
-  <|> try (symbol ">="  *> return GreaterOrEqOperator)
-  <|>     (symbol ">"   *> return GreaterOperator)
+  =   try (symbol "=="  $> EqOperator)
+  <|> try (symbol "!="  $> NotEqOperator)
+  <|> try (symbol "<="  $> LessOrEqOperator)
+  <|> try (symbol "<"   $> LessOperator)
+  <|> try (symbol ">="  $> GreaterOrEqOperator)
+  <|>     (symbol ">"   $> GreaterOperator)
 
 matchOperator :: Parser u MatchOperator
-matchOperator = symbol "=~" *> return MatchOperator
+matchOperator = symbol "=~" $> MatchOperator
 
 current :: Parser u PathToken
-current = symbol "@" *> return CurrentNode
+current = symbol "@" $> CurrentNode
 
 subQuery :: Parser u SubQuery
 subQuery = SubQuery <$> ((:) <$> (try current <|> root) <*> pathSequence)
@@ -555,7 +557,7 @@ expression :: Parser u FilterToken
 expression = try expression1 <|> try expression2 <|> try expression3 <|> fail "expression"
 
 pBooleanOperator :: Parser u BinaryBooleanOperator
-pBooleanOperator = try (symbol "&&" *> return AndOperator) <|> (symbol "||" *> return OrOperator)
+pBooleanOperator = try (symbol "&&" $> AndOperator) <|> (symbol "||" $> OrOperator)
 
 booleanExpression :: Parser u FilterToken
 booleanExpression = tokenOf <$> expression <*> optionMaybe ((,) <$> pBooleanOperator <*> booleanExpression)
@@ -582,10 +584,10 @@ recursiveField :: Parser u FieldAccessor
 recursiveField = RecursiveField <$> (symbol ".." *> field)
 
 anyChild :: Parser u FieldAccessor
-anyChild = (try (symbol ".*") <|> try (symbol "['*']") <|> symbol "[\"*\"]") *> return AnyField
+anyChild = (try (symbol ".*") <|> try (symbol "['*']") <|> symbol "[\"*\"]") $> AnyField
 
 recursiveAny :: Parser u FieldAccessor
-recursiveAny = symbol "..*" *> return RecursiveAnyField
+recursiveAny = symbol "..*" $> RecursiveAnyField
 
 fieldAccessors :: Parser u PathToken
 fieldAccessors
@@ -606,7 +608,7 @@ pathSequence :: Parser u [PathToken]
 pathSequence = many pathStep
 
 root :: Parser u PathToken
-root = symbol "$" *> return (PathTokenOfFieldAccessor RootNode)
+root = symbol "$" $> PathTokenOfFieldAccessor RootNode
 
 query :: Parser u [PathToken]
 query = (:) <$> root <*> pathSequence

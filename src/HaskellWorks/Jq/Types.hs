@@ -1,18 +1,10 @@
--- |
--- Copyright: 2017 John Ky
--- License: MIT
---
--- Json
-
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeOperators     #-}
 
 module HaskellWorks.Jq.Types where
 
 import Control.Applicative
 import Data.Attoparsec.Text
 import Data.Char
--- import Data.Word (Word8)
 
 data JsonPath
 
@@ -47,7 +39,7 @@ queryExpr :: Parser QueryExpr
 queryExpr
   =   QueryAnd            <$> queryExpr <*> ("&&" *> ws *> queryExpr)
   <|> QueryOr             <$> queryExpr <*> ("||" *> ws *> queryExpr)
-  <|> const QueryStar     <$> "*"
+  <|> QueryStar           <$  "*"
   <|> QueryFieldGreater   <$> ("@." *> identifier) <*> (">" *> int)
   <|> QueryFieldLesser    <$> ("@." *> identifier) <*> ("<" *> int)
   <|> QueryField          <$> ("@." *> identifier)

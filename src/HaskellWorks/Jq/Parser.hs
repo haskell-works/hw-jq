@@ -1,11 +1,4 @@
--- |
--- Copyright: 2017 John Ky
--- License: MIT
---
--- Json
-
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeOperators     #-}
 
 module HaskellWorks.Jq.Parser where
 

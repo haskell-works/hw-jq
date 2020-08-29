@@ -19,7 +19,7 @@ data ArrayAccessor
   | ArrayAccessorOfArraySlice         ArraySlice
   deriving (Eq, Show)
 
-data ArrayRandomAccess = ArrayRandomAccess [Integer]
+newtype ArrayRandomAccess = ArrayRandomAccess [Integer]
   deriving (Eq, Show)
 
 data ArraySlice = ArraySlice
@@ -37,9 +37,9 @@ data FilterValue
   | FilterValueOfJPString           JPString
   deriving (Eq, Show)
 
-data JPString = JPString String deriving (Eq, Show)
+newtype JPString = JPString String deriving (Eq, Show)
 
-data SubQuery = SubQuery [PathToken] deriving (Eq, Show)
+newtype SubQuery = SubQuery [PathToken] deriving (Eq, Show)
 
 data FilterDirectValue
   = JPNull
@@ -69,36 +69,36 @@ data BinaryBooleanOperator
 
 data MatchOperator = MatchOperator deriving (Eq, Show)
 
-data RegexMode = RegexMode
+newtype RegexMode = RegexMode
   { regexInsensitive :: Bool
   }
   deriving (Eq, Show)
 
 data RegexLiteral = RegexLiteral
-  { regexString   :: String
-  , regexMode     :: RegexMode
+  { regexString :: String
+  , regexMode   :: RegexMode
   }
   deriving (Eq, Show)
 
 data FilterToken
   = BooleanFilter
-    { booleanOperator   :: BinaryBooleanOperator
-    , booleanFilterLhs  :: FilterToken
-    , booleanFilterRhs  :: FilterToken
+    { booleanOperator  :: BinaryBooleanOperator
+    , booleanFilterLhs :: FilterToken
+    , booleanFilterRhs :: FilterToken
     }
   | ComparisonFilter
-    { operator          :: ComparisonOperator
-    , comparisonLhs     :: FilterValue
-    , comparisonRhs     :: FilterValue
+    { operator      :: ComparisonOperator
+    , comparisonLhs :: FilterValue
+    , comparisonRhs :: FilterValue
     }
   | MatchFilter
-    { matchValue        :: SubQuery
-    , matchRegex        :: RegexLiteral
+    { matchValue :: SubQuery
+    , matchRegex :: RegexLiteral
     }
   | HasFilter SubQuery
   deriving (Eq, Show)
 
-data RecursiveFilterToken = RecursiveFilterToken FilterToken
+newtype RecursiveFilterToken = RecursiveFilterToken FilterToken
   deriving (Eq, Show)
 
 data PathToken
@@ -117,13 +117,13 @@ data Relative
   | RelativeNil
   deriving (Eq, Show)
 
-data Absolute = Absolute Relative deriving (Eq, Show)
+newtype Absolute = Absolute Relative deriving (Eq, Show)
 
 data Path = PathOfAbsolute [PathToken] | PathOfRelative [PathToken]
 
 ----
 
-data JqFieldName = JqFieldName String deriving (Eq, Show)
+newtype JqFieldName = JqFieldName String deriving (Eq, Show)
 
 data JqSelector
   = JqSelectorOfFieldLiteral JqFieldName

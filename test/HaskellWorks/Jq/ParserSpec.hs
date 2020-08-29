@@ -1,25 +1,23 @@
 
-{-# LANGUAGE ExplicitForAll             #-}
-{-# LANGUAGE FlexibleContexts           #-}
-{-# LANGUAGE FlexibleInstances          #-}
-{-# LANGUAGE InstanceSigs               #-}
-{-# LANGUAGE MultiParamTypeClasses      #-}
-{-# LANGUAGE NoMonomorphismRestriction  #-}
-{-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE FlexibleContexts          #-}
+{-# LANGUAGE FlexibleInstances         #-}
+{-# LANGUAGE MultiParamTypeClasses     #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE OverloadedStrings         #-}
+{-# LANGUAGE ScopedTypeVariables       #-}
 
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
 module HaskellWorks.Jq.ParserSpec (spec) where
 
-import           HaskellWorks.Jq.Ast
-import           HaskellWorks.Jq.Lexer
-import           HaskellWorks.Jq.Parser
-import           Data.List.Extra (replace)
-import           Text.Parsec
-import           Test.Hspec
+import Data.List.Extra        (replace)
+import HaskellWorks.Jq.Ast
+import HaskellWorks.Jq.Lexer
+import HaskellWorks.Jq.Parser
+import Test.Hspec
+import Text.Parsec
 
-{-# ANN module ("HLint: ignore Redundant do" :: String) #-}
+{- HLINT ignore "Redundant do"        -}
 
 escapeDoubleQuote :: String -> String
 escapeDoubleQuote = replace "\"" "\\\""

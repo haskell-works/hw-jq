@@ -1,23 +1,20 @@
-
-{-# LANGUAGE ExplicitForAll             #-}
-{-# LANGUAGE FlexibleContexts           #-}
-{-# LANGUAGE FlexibleInstances          #-}
-{-# LANGUAGE InstanceSigs               #-}
-{-# LANGUAGE MultiParamTypeClasses      #-}
-{-# LANGUAGE NoMonomorphismRestriction  #-}
-{-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE FlexibleContexts          #-}
+{-# LANGUAGE FlexibleInstances         #-}
+{-# LANGUAGE MultiParamTypeClasses     #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE OverloadedStrings         #-}
+{-# LANGUAGE ScopedTypeVariables       #-}
 
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
 module HaskellWorks.Jq.LexerSpec (spec) where
 
-import           HaskellWorks.Jq.Ast
-import           HaskellWorks.Jq.Lexer hiding (operator)
-import           Text.Parsec
-import           Test.Hspec
+import HaskellWorks.Jq.Ast
+import HaskellWorks.Jq.Lexer hiding (operator)
+import Test.Hspec
+import Text.Parsec
 
-{-# ANN module ("HLint: ignore Redundant do" :: String) #-}
+{- HLINT ignore "Redundant do"        -}
 
 spec :: Spec
 spec = describe "HaskellWorks.Jq.LexerSpec" $ do
