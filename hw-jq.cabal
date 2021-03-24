@@ -23,7 +23,7 @@ common base                     { build-depends: base                     >= 4  
 
 common ansi-wl-pprint           { build-depends: ansi-wl-pprint                                     }
 common array                    { build-depends: array                                              }
-common attoparsec               { build-depends: attoparsec                                         }
+common attoparsec               { build-depends: attoparsec               >= 0.13       && < 0.15   }
 common bytestring               { build-depends: bytestring                                         }
 common conduit                  { build-depends: conduit                                            }
 common containers               { build-depends: containers                                         }
